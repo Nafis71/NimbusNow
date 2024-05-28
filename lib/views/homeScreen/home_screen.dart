@@ -4,7 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:gap/gap.dart';
+import 'package:nimbus_now/controllers/data_controller.dart';
+import 'package:nimbus_now/widgets/other_weather_information.dart';
 import 'package:nimbus_now/widgets/weather_information.dart';
+import 'package:provider/provider.dart';
 import 'package:weather_animation/weather_animation.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,8 +18,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late final DataController dataController;
+
+  @override
+  void initState() {
+    dataController = Provider.of<DataController>(context,listen: false);
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    print("Main Tree");
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -25,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const WeatherInformation(),
+              WeatherInformation(dataController: dataController,),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -40,57 +53,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontSize: 25,
                           fontWeight: FontWeight.bold),
                     ),
-                    const Gap(20),
-                    SizedBox(
-                      child: Expanded(
-                        child: GridView.builder(
-                          primary: false,
-                          shrinkWrap: true,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 4,
-                                  crossAxisSpacing: 10,
-                                  mainAxisSpacing: 20),
-                          itemCount: 6,
-                          itemBuilder: (context, index) {
-                            return const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 25),
-                              child: Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 25,
-                                    backgroundColor: Color(0xFFE5E8F4),
-                                    child: Icon(Icons.wind_power),
-                                  ),
-                                  Gap(10),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Wind",
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      Text(
-                                        "24 km/h",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
+                    Consumer<DataController>(builder: (context,provider,child)=>GridView.builder(
+                      primary: false,
+                      shrinkWrap: true,
+                      gridDelegate:
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 4,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 20),
+                      itemCount: 6,
+                      itemBuilder: (context, index) {
+                        return OtherWeatherInformation(provider: provider, index: index,);
+                      },
+                    ),),
                   ],
                 ),
               ),

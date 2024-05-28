@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:nimbus_now/controllers/data_controller.dart';
+import 'package:nimbus_now/widgets/hot_scene.dart';
+import 'package:nimbus_now/widgets/overcast_scene.dart';
+import 'package:nimbus_now/widgets/rain_scene.dart';
+import 'package:nimbus_now/widgets/sunny_scene.dart';
+import 'package:nimbus_now/widgets/thunder_scene.dart';
+import 'package:provider/provider.dart';
 import 'package:weather_animation/weather_animation.dart';
+
 class WeatherInformation extends StatelessWidget {
-  const WeatherInformation({super.key});
+  final DataController dataController;
+
+  const WeatherInformation({super.key, required this.dataController});
 
   @override
   Widget build(BuildContext context) {
@@ -10,77 +21,114 @@ class WeatherInformation extends StatelessWidget {
       alignment: Alignment.topCenter,
       child: Stack(
         children: [
-          WrapperScene(
-            sizeCanvas: Size(MediaQuery.of(context).size.width,
-                MediaQuery.of(context).size.height * 0.5),
-            colors: const [
-              Color(0xFF2C8EEC),
-              Color(0xFF0A75F2),
-            ],
-            children: const [
-              SunWidget(
-                sunConfig: SunConfig(
-                    blurSigma: 30.00,
-                    animMidMill: 3000,
-                    animOutMill: 3000),
-              ),
-              CloudWidget(),
-              WindWidget(
-                windConfig: WindConfig(
-                  color: Colors.white,
-                  slideDurMill: 2000,
-                ),
-              ),
-            ],
-          ),
+          Consumer<DataController>(builder: (context,provider,child){
+            if(provider.currentCondition!.contains("thunder")){
+              return const ThunderScene();
+            } else if(provider.currentCondition!.contains("overcast")){
+              return const OvercastScene();
+            } else if (provider.currentCondition!.contains("rain")){
+              return const RainScene();
+            } else if(provider.currentCondition!.contains("hot") || provider.currentCondition!.contains("haze")){
+              return const HotScene();
+            }
+            return const SunnyScene();
+          }),
           Positioned(
             top: MediaQuery.of(context).size.height * 0.05,
             right: 10,
-            child: RichText(
-              text: const TextSpan(children: [
-                TextSpan(
-                    text: "Nimbus",
-                    style: TextStyle(
-                        fontSize: 25, fontWeight: FontWeight.w700)),
-                TextSpan(
-                    text: "Now",
-                    style: TextStyle(
-                        color: Color(0xFFFFA726),
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold)),
-              ]),
+            child: InkWell(
+              onTap: () {
+                dataController.getWeatherData();
+              },
+              child: RichText(
+                text: const TextSpan(children: [
+                  TextSpan(
+                      text: "Nimbus",
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
+                  TextSpan(
+                      text: "Now",
+                      style: TextStyle(
+                          color: Color(0xFFFFA726),
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold)),
+                ]),
+              ),
             ),
           ),
           Positioned(
             top: MediaQuery.of(context).size.height * 0.39,
             left: 20,
-            child: RichText(
-              text: const TextSpan(
+            child: Consumer<DataController>(
+              builder: (context, provider, child) => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextSpan(
-                      text: "20",
-                      style: TextStyle(
-                          fontSize: 55, fontWeight: FontWeight.bold)),
-                  TextSpan(
-                    text: "°",
-                    style: TextStyle(
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold,
-                      fontFeatures: [FontFeature.superscripts()],
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: provider.weatherModel.current?.tempC.toString(),
+                            style: const TextStyle(
+                                fontSize: 55, fontWeight: FontWeight.bold)),
+                        TextSpan(
+                          text: (provider.weatherModel.current?.tempC != null)
+                              ? "°"
+                              : "",
+                          style: const TextStyle(
+                            fontSize: 50,
+                            fontWeight: FontWeight.bold,
+                            fontFeatures: [FontFeature.superscripts()],
+                          ),
+                        ),
+                      ],
                     ),
+                  ),
+                  Text(
+                    provider.weatherModel.current?.condition?.text.toString() ?? "Refreshing...",
+                    style: const TextStyle(color: Colors.white, fontSize: 17),
                   ),
                 ],
               ),
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.45,
-            left: 20,
-            child: const Text(
-              "Windy",
-              style: TextStyle(color: Colors.white, fontSize: 25),
+            top: MediaQuery.of(context).size.height * 0.412,
+            right: 10,
+            child: Consumer<DataController>(
+              builder: (context, provider, child) => Column(
+                children: [
+                  Icon(Icons.location_on,color: Colors.white,size: 30,),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: "${provider.weatherModel.location?.name}, ",
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
+                        TextSpan(
+                          text: provider.weatherModel.location?.country,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: "${provider.getDateTime()}, ",
+                            style: const TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.normal)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
