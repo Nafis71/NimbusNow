@@ -8,7 +8,7 @@ class ThunderScene extends StatelessWidget {
   Widget build(BuildContext context) {
     return WrapperScene(
       sizeCanvas: Size(MediaQuery.of(context).size.width,
-          MediaQuery.of(context).size.height * 0.5),
+          MediaQuery.of(context).size.height * 0.55),
       colors: const [
         Color(0xff263238),
         Color(0xff78909c),

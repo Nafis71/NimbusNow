@@ -8,7 +8,7 @@ class HotScene extends StatelessWidget {
   Widget build(BuildContext context) {
     return WrapperScene(
       sizeCanvas: Size(MediaQuery.of(context).size.width,
-          MediaQuery.of(context).size.height * 0.5),
+          MediaQuery.of(context).size.height * 0.55),
       colors: const [
         Color(0xFFd50000),
         Color(0xFFffd54f),

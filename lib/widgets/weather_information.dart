@@ -17,7 +17,7 @@ class WeatherInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.5,
+      height: MediaQuery.of(context).size.height * 0.55,
       alignment: Alignment.topCenter,
       child: Stack(
         children: [
@@ -57,7 +57,7 @@ class WeatherInformation extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.39,
+            top: MediaQuery.of(context).size.height * 0.4,
             left: 20,
             child: Consumer<DataController>(
               builder: (context, provider, child) => Column(
@@ -92,12 +92,12 @@ class WeatherInformation extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.412,
+            top: MediaQuery.of(context).size.height * 0.1,
             right: 10,
             child: Consumer<DataController>(
               builder: (context, provider, child) => Column(
                 children: [
-                  Icon(Icons.location_on,color: Colors.white,size: 30,),
+                  const Icon(Icons.location_on,color: Colors.white,size: 30,),
                   RichText(
                     text: TextSpan(
                       children: [
@@ -119,7 +119,7 @@ class WeatherInformation extends StatelessWidget {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                            text: "${provider.getDateTime()}, ",
+                            text: "${provider.getDateTime()} ",
                             style: const TextStyle(
                                 fontSize: 13, fontWeight: FontWeight.normal)),
                       ],

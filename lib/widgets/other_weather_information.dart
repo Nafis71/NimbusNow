@@ -10,33 +10,34 @@ class OtherWeatherInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         children: [
           CircleAvatar(
             radius: 25,
-            backgroundColor: Color(0xFFE5E8F4),
+            backgroundColor: const Color(0xFFE5E8F4),
             child: Icon(provider.extraWeatherData[index]['icon'],size: 27,color: Colors.black,),
           ),
-          Gap(10),
+          const Gap(10),
           Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment:
             CrossAxisAlignment.start,
             children: [
               Text(
                 provider.extraWeatherData[index]['parameterName'],
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.grey,
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: FontWeight.w600),
               ),
               Wrap(
                 children: [
                   Text(
                     provider.extraWeatherData[index]['value'],
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.black,
-                        fontSize: 17,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],

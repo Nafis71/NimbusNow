@@ -8,7 +8,7 @@ class OvercastScene extends StatelessWidget {
   Widget build(BuildContext context) {
     return WrapperScene(
       sizeCanvas: Size(MediaQuery.of(context).size.width,
-          MediaQuery.of(context).size.height * 0.5),
+          MediaQuery.of(context).size.height * 0.55),
       colors: const [
         Color(0xFF424242),
         Color(0xFFcfd8dc),

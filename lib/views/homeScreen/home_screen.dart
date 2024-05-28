@@ -23,13 +23,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     dataController = Provider.of<DataController>(context,listen: false);
+    loadData();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    dataController.dispose();
+    super.dispose();
+  }
+
+  void loadData() async{
+    dataController.getWeatherData();
   }
 
 
   @override
   Widget build(BuildContext context) {
-    print("Main Tree");
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -45,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Gap(20),
+                    const Gap(10),
                     const Text(
                       "Weather Now",
                       style: TextStyle(
@@ -59,9 +69,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       gridDelegate:
                       const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
-                          childAspectRatio: 4,
+                          childAspectRatio: 3,
                           crossAxisSpacing: 10,
-                          mainAxisSpacing: 20),
+                          mainAxisSpacing: 4),
                       itemCount: 6,
                       itemBuilder: (context, index) {
                         return OtherWeatherInformation(provider: provider, index: index,);

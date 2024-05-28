@@ -8,7 +8,7 @@ class SunnyScene extends StatelessWidget {
   Widget build(BuildContext context) {
     return WrapperScene(
       sizeCanvas: Size(MediaQuery.of(context).size.width,
-          MediaQuery.of(context).size.height * 0.5),
+          MediaQuery.of(context).size.height * 0.55),
       colors: const [
         Color(0xFF2C8EEC),
         Color(0xFF0A75F2),

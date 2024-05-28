@@ -21,14 +21,14 @@ class DataController extends ChangeNotifier{
       "icon" : Icons.air,
     },
     {
-      "parameterName"  : "Precipitation",
+      "parameterName"  : "Visibility",
       "value" : "79%" ,
-      "icon" : Icons.umbrella,
+      "icon" : Icons.visibility,
     },
     {
       "parameterName"  : "Humidity",
       "value" : "80%" ,
-      "icon" : Icons.thermostat,
+      "icon" : Icons.water_drop_outlined,
     },
     {
       "parameterName"  : "UV Index",
@@ -37,8 +37,8 @@ class DataController extends ChangeNotifier{
     },
     {
       "parameterName"  : "Cloud",
-      "value" : "Mostly Cloudy" ,
-      "icon" : Icons.thermostat,
+      "value" : "23%" ,
+      "icon" : Icons.cloud,
     }
   ];
 
@@ -47,6 +47,12 @@ class DataController extends ChangeNotifier{
       Map<String,dynamic> jsonData = await _apiService.fetchWeatherData("Dhaka");
       weatherModel = WeatherModel.fromJson(jsonData);
       currentCondition = weatherModel.current?.condition?.text?.toLowerCase() ?? "sunny";
+      extraWeatherData[0]["value"] = "${weatherModel.current?.feelslikeC.toString()}°";
+      extraWeatherData[1]["value"] = "${weatherModel.current?.windKph.toString()} km/h";
+      extraWeatherData[2]["value"] = "${weatherModel.current?.visKm.toString()} km";
+      extraWeatherData[3]["value"] = "${weatherModel.current?.humidity.toString()}%";
+      extraWeatherData[4]["value"] = "${weatherModel.current?.uv?.toInt().toString()}/10";
+      extraWeatherData[5]["value"] = "${weatherModel.current?.cloud.toString()}%";
       notifyListeners();
     }catch(e){
       if(kDebugMode){
