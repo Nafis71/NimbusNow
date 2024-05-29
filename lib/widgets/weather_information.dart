@@ -23,7 +23,7 @@ class WeatherInformation extends StatelessWidget {
       child: Stack(
         children: [
           Animate(
-            effects: const [FadeEffect(duration: Duration(seconds: 4),curve: Curves.decelerate)],
+            effects: const [FadeEffect(duration: Duration(seconds: 5),curve: Curves.decelerate)],
             child: Consumer<DataController>(builder: (context,provider,child){
               if(provider.currentCondition!.contains("thunder")){
                 return const ThunderScene();
@@ -56,7 +56,7 @@ class WeatherInformation extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.4,
+            top: MediaQuery.of(context).size.height * 0.415,
             left: 20,
             child: Consumer<DataController>(
               builder: (context, provider, child) => Column(

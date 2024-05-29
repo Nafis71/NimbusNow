@@ -50,6 +50,7 @@ class DataController extends ChangeNotifier{
   Future<void> getWeatherData() async{
     try{
       Map<String,dynamic> jsonData = await _apiService.fetchWeatherData("Dhaka");
+      forecastModel.clear();
       weatherModel = WeatherModel.fromJson(jsonData);
       currentCondition = weatherModel.current?.condition?.text?.toLowerCase() ?? "sunny";
       extraWeatherData[0]["value"] = "${weatherModel.current?.feelslikeC.toString()}°";
@@ -69,12 +70,12 @@ class DataController extends ChangeNotifier{
   Future<void> getWeatherForecast() async{
     try{
       List<dynamic> jsonList = await _apiService.fetchForecastData("Dhaka");
+      hourlyForecastList.clear();
       for(Map<String,dynamic> json in jsonList){
         forecastModel.add(ForecastModel.fromJson(json));
       }
       String currentHour = DateFormat('hh').format(DateTime.now());
       int length = forecastModel.length;
-      print(length);
       int newIndex = 0;
       for(int index=0; index<length; index++){
         for(int j = 0; j< forecastModel[index].hour!.length; j++){
