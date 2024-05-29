@@ -9,14 +9,16 @@ class OtherWeatherInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 13),
+      padding: const EdgeInsets.all(1),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           CircleAvatar(
             radius: 25,
-            backgroundColor: const Color(0xFFE5E8F4),
-            child: Icon(provider.extraWeatherData[index]['icon'],size: 27,color: Colors.black,),
+            backgroundColor: Colors.transparent,
+            child: Icon(provider.extraWeatherData[index]['icon'],size: 30,color: Colors.white,),
           ),
           const Gap(10),
           Column(
@@ -27,7 +29,7 @@ class OtherWeatherInformation extends StatelessWidget {
               Text(
                 provider.extraWeatherData[index]['parameterName'],
                 style: const TextStyle(
-                    color: Colors.grey,
+                    color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600),
               ),
@@ -36,7 +38,7 @@ class OtherWeatherInformation extends StatelessWidget {
                   Text(
                     provider.extraWeatherData[index]['value'],
                     style: const TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),

@@ -1,4 +1,6 @@
+import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 import 'package:nimbus_now/controllers/data_controller.dart';
 import 'package:nimbus_now/widgets/hot_scene.dart';
@@ -7,7 +9,6 @@ import 'package:nimbus_now/widgets/rain_scene.dart';
 import 'package:nimbus_now/widgets/sunny_scene.dart';
 import 'package:nimbus_now/widgets/thunder_scene.dart';
 import 'package:provider/provider.dart';
-import 'package:weather_animation/weather_animation.dart';
 
 class WeatherInformation extends StatelessWidget {
   final DataController dataController;
@@ -21,39 +22,37 @@ class WeatherInformation extends StatelessWidget {
       alignment: Alignment.topCenter,
       child: Stack(
         children: [
-          Consumer<DataController>(builder: (context,provider,child){
-            if(provider.currentCondition!.contains("thunder")){
-              return const ThunderScene();
-            } else if(provider.currentCondition!.contains("overcast")){
-              return const OvercastScene();
-            } else if (provider.currentCondition!.contains("rain")){
-              return const RainScene();
-            } else if(provider.currentCondition!.contains("hot") || provider.currentCondition!.contains("haze")){
-              return const HotScene();
-            }
-            return const SunnyScene();
-          }),
+          Animate(
+            effects: const [FadeEffect(duration: Duration(seconds: 4),curve: Curves.decelerate)],
+            child: Consumer<DataController>(builder: (context,provider,child){
+              if(provider.currentCondition!.contains("thunder")){
+                return const ThunderScene();
+              } else if(provider.currentCondition!.contains("overcast")){
+                return const OvercastScene();
+              } else if (provider.currentCondition!.contains("rain")){
+                return const RainScene();
+              } else if(provider.currentCondition!.contains("hot") || provider.currentCondition!.contains("haze")){
+                return const HotScene();
+              }
+              return const SunnyScene();
+            }),
+          ),
           Positioned(
             top: MediaQuery.of(context).size.height * 0.05,
             right: 10,
-            child: InkWell(
-              onTap: () {
-                dataController.getWeatherData();
-              },
-              child: RichText(
-                text: const TextSpan(children: [
-                  TextSpan(
-                      text: "Nimbus",
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
-                  TextSpan(
-                      text: "Now",
-                      style: TextStyle(
-                          color: Color(0xFFFFA726),
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold)),
-                ]),
-              ),
+            child: RichText(
+              text: const TextSpan(children: [
+                TextSpan(
+                    text: "Nimbus",
+                    style:
+                        TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
+                TextSpan(
+                    text: "Now",
+                    style: TextStyle(
+                        color: Color(0xFFFFA726),
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold)),
+              ]),
             ),
           ),
           Positioned(

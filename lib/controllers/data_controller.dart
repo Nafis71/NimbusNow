@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:nimbus_now/models/weather_model.dart';
 import 'package:nimbus_now/services/api_service.dart';
+import '../models/weatherModels/weather_model.dart';
 
 class DataController extends ChangeNotifier{
   final ApiService _apiService = ApiService();
@@ -38,7 +37,7 @@ class DataController extends ChangeNotifier{
     {
       "parameterName"  : "Cloud",
       "value" : "23%" ,
-      "icon" : Icons.cloud,
+      "icon" : Icons.cloud_outlined,
     }
   ];
 

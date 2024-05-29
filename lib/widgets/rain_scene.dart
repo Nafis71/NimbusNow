@@ -10,8 +10,8 @@ class RainScene extends StatelessWidget {
       sizeCanvas: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height * 0.55),
       colors: const [
-        Color(0xff263238),
-        Color(0xff78909c),
+        Colors.transparent,
+        Colors.transparent,
 
       ],
       children: const [

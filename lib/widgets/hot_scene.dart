@@ -10,8 +10,8 @@ class HotScene extends StatelessWidget {
       sizeCanvas: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height * 0.55),
       colors: const [
-        Color(0xFFd50000),
-        Color(0xFFffd54f),
+        Colors.transparent,
+        Colors.transparent,
       ],
       children: const [
         SunWidget(
