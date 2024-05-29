@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:nimbus_now/models/forecastModels/Hour.dart';
+import 'package:nimbus_now/models/forecastModels/forecastModel.dart';
 import 'package:nimbus_now/services/api_service.dart';
 import '../models/weatherModels/weather_model.dart';
 
@@ -8,6 +12,8 @@ class DataController extends ChangeNotifier{
   final ApiService _apiService = ApiService();
   WeatherModel weatherModel = WeatherModel();
   String? currentCondition = "sunny";
+  List<ForecastModel> forecastModel = [];
+  List<Hour> hourlyForecastList = [];
   List<Map<String,dynamic>> extraWeatherData = [
     {
      "parameterName"  : "Feel like",
@@ -59,6 +65,39 @@ class DataController extends ChangeNotifier{
       }
     }
   }
+
+  Future<void> getWeatherForecast() async{
+    try{
+      List<dynamic> jsonList = await _apiService.fetchForecastData("Dhaka");
+      for(Map<String,dynamic> json in jsonList){
+        forecastModel.add(ForecastModel.fromJson(json));
+      }
+      String currentHour = DateFormat('hh').format(DateTime.now());
+      int length = forecastModel.length;
+      print(length);
+      int newIndex = 0;
+      for(int index=0; index<length; index++){
+        for(int j = 0; j< forecastModel[index].hour!.length; j++){
+          String modelTime = DateFormat('hh').format(DateTime.parse(forecastModel[index].hour![j].time!));
+          if(modelTime == currentHour){
+            newIndex = j;
+            break;
+          }
+        }
+      }
+      for(int index=0; index<length; index++){
+        for(int j = newIndex; j< forecastModel[index].hour!.length; j++){
+          hourlyForecastList.add(forecastModel[index].hour![j]);
+        }
+      }
+      notifyListeners();
+    }catch(e){
+      if(kDebugMode){
+        debugPrint(e.toString());
+      }
+    }
+  }
+
 
   String getDateTime(){
     return DateFormat.MMMMEEEEd().format(DateTime.now());

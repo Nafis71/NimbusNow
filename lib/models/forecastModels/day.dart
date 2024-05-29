@@ -8,19 +8,19 @@ class Day {
   double? avgtempC;
   double? avgtempF;
   double? maxwindMph;
-  int? maxwindKph;
+  double? maxwindKph;
   double? totalprecipMm;
   double? totalprecipIn;
-  int? totalsnowCm;
+  double? totalsnowCm;
   double? avgvisKm;
-  int? avgvisMiles;
+  double? avgvisMiles;
   int? avghumidity;
   int? dailyWillItRain;
   int? dailyChanceOfRain;
   int? dailyWillItSnow;
   int? dailyChanceOfSnow;
   Condition? condition;
-  int? uv;
+  double? uv;
 
   Day(
       {this.maxtempC,
