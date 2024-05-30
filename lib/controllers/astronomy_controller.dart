@@ -23,33 +23,33 @@ class AstronomyController extends ChangeNotifier {
 
   set setHasData(bool value) {
     _hasData = value;
-    print("CurrentHour ${getCurrentHour()}");
-    print("Sunrise ${getSunriseHour()}");
-    print("Sunset ${getSunsetHour()}");
     notifyListeners();
   }
 
   int getCurrentHour() {
-    int currentHour =  int.tryParse(DateFormat('hh').format(DateTime.now())) ?? 0;
+    int currentHour =
+        int.tryParse(DateFormat('hh').format(DateTime.now())) ?? 0;
     String currentPeriod = DateFormat('a').format(DateTime.now());
-    if(currentPeriod == 'PM' && (currentHour + 12) <= getSunsetHour()) {
+    if (currentPeriod == 'PM' && (currentHour + 12) <= getSunsetHour()) {
       return currentHour + 12;
     }
-    if(currentPeriod == 'PM' && (currentHour + 12) > getSunsetHour()){
+    if (currentPeriod == 'PM' && (currentHour + 12) > getSunsetHour()) {
       return getSunsetHour();
     }
     return currentHour;
   }
 
   int getSunsetHour() {
-    int sunsetHour = int.tryParse(
-        DateFormat('hh').format(DateTime.parse(formatTimeString(_sunsetTime)))) ?? 0;
+    int sunsetHour = int.tryParse(DateFormat('hh')
+            .format(DateTime.parse(formatTimeString(_sunsetTime)))) ??
+        0;
     return sunsetHour + 12;
   }
 
   int getSunriseHour() {
-    return int.tryParse(
-        DateFormat('hh').format(DateTime.parse(formatTimeString(_sunriseTime)))) ?? 0;
+    return int.tryParse(DateFormat('hh')
+            .format(DateTime.parse(formatTimeString(_sunriseTime)))) ??
+        0;
   }
 
   String formatTimeString(String timeString) {
@@ -67,9 +67,8 @@ class AstronomyController extends ChangeNotifier {
       } else if (period == "AM" && hour == 12) {
         hour = 0;
       }
-      
-      return "2024-01-01T${hour.toString().padLeft(2, '0')}:${minute.toString()
-          .padLeft(2, '0')}:00";
+
+      return "2024-01-01T${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}:00";
     }
     throw const FormatException("Invalid time format");
   }

@@ -1,9 +1,5 @@
-import 'package:another_xlider/another_xlider.dart';
-import 'package:another_xlider/models/handler.dart';
-import 'package:another_xlider/models/tooltip/tooltip.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:nimbus_now/controllers/astronomy_controller.dart';
 import 'package:nimbus_now/controllers/data_controller.dart';
 import 'package:nimbus_now/controllers/location_controller.dart';
@@ -67,58 +63,64 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: () async {
-          await loadData();
-        },
-        backgroundColor: const Color(0xff263238),
-        color: const Color(0xFFFFA726),
-        displacement: 60,
-        child: Container(
-          width: double.infinity,
-          alignment: Alignment.topCenter,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                colors: [
-                  Color(0xff263238),
-                  Color(0xff5b666e),
+    return Scaffold(body: OrientationBuilder(
+      builder: (BuildContext context, Orientation orientation) {
+        return RefreshIndicator(
+          onRefresh: () async {
+            await loadData();
+          },
+          backgroundColor: const Color(0xff263238),
+          color: const Color(0xFFFFA726),
+          displacement: 60,
+          child: Container(
+            width: double.infinity,
+            alignment: Alignment.topCenter,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [
+                    Color(0xff263238),
+                    Color(0xff5b666e),
+                  ],
+                  begin: FractionalOffset(0.0, 0.0),
+                  end: FractionalOffset(1.0, 0.1),
+                  stops: [0.0, 1.0],
+                  tileMode: TileMode.clamp),
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  WeatherInformation(
+                    orientation: orientation,
+                    dataController: dataController,
+                    locatorFunction: () async {
+                      locationController.setLocation = null;
+                      Future.delayed(const Duration(seconds: 1), () async {
+                        await locationController.getCurrentLocation();
+                      });
+                      preferences!.setString(
+                          "location", locationController.location.toString());
+                      await loadData();
+                    },
+                  ),
+                  LocationSelector(
+                    preferences: preferences,
+                    dataController: dataController,
+                  ),
+                  const WeatherForecastHourLayout(),
+                  const Gap(5),
+                  MoreWeatherInformationLayout(
+                    orientation: orientation,
+                  ),
+                  const Gap(10),
+                  const AstronomyLayout(),
+                  const Gap(10),
                 ],
-                begin: FractionalOffset(0.0, 0.0),
-                end: FractionalOffset(1.0, 0.1),
-                stops: [0.0, 1.0],
-                tileMode: TileMode.clamp),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                WeatherInformation(
-                  dataController: dataController,
-                  locatorFunction: () async {
-                    locationController.setLocation = null;
-                    Future.delayed(Duration(seconds: 1),() async{
-                      await locationController.getCurrentLocation();
-                    });
-                    preferences!.setString("location", locationController.location.toString());
-                    await loadData();
-                  },
-                ),
-                LocationSelector(
-                  preferences: preferences,
-                  dataController: dataController,
-                ),
-                const WeatherForecastHourLayout(),
-                const Gap(5),
-                const MoreWeatherInformationLayout(),
-                const Gap(10),
-                const AstronomyLayout(),
-                const Gap(10),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        );
+      },
+    ));
   }
 }

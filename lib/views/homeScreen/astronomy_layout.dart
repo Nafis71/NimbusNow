@@ -4,7 +4,6 @@ import 'package:another_xlider/models/tooltip/tooltip.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nimbus_now/controllers/astronomy_controller.dart';
-import 'package:nimbus_now/controllers/data_controller.dart';
 import 'package:provider/provider.dart';
 
 class AstronomyLayout extends StatelessWidget {

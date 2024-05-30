@@ -10,39 +10,44 @@ import '../models/DropdownMenu/dropdown_menu.dart';
 class LocationSelector extends StatelessWidget {
   final SharedPreferences? preferences;
   final DataController dataController;
-  const LocationSelector({super.key, required this.preferences, required this.dataController});
+
+  const LocationSelector(
+      {super.key, required this.preferences, required this.dataController});
 
   @override
   Widget build(BuildContext context) {
-    return  Consumer<LocationController>(builder: (context, locationProvider, child) =>
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: CustomDropdown<String>.search(
-            headerBuilder:(context,_){
-              return Text(locationProvider.location ?? "Locating...",style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700
-              ),);
-            } ,
-            items: dropdownMenuList,
-            onChanged: (value) async {
-              locationProvider.setLocation = value;
-              preferences?.setString("location", value);
-              await dataController.getWeatherForecast();
-              await dataController.getWeatherData();
-            },
-            hintText: locationProvider.location ?? "Locating...",
-            hideSelectedFieldWhenExpanded: true,
-            decoration: const CustomDropdownDecoration(
-                closedFillColor: Colors.white12,
-                expandedFillColor: Colors.white,
-                closedSuffixIcon: Icon(Icons.location_on, color: Colors.white,),
-                hintStyle: TextStyle(
-                    color: Colors.white
+    return Consumer<LocationController>(
+        builder: (context, locationProvider, child) => Padding(
+              padding: const EdgeInsets.all(8),
+              child: CustomDropdown<String>.search(
+                headerBuilder: (context, _) {
+                  return Text(
+                    locationProvider.location ?? "Locating...",
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700),
+                  );
+                },
+                items: dropdownMenuList,
+                onChanged: (value) async {
+                  locationProvider.setLocation = value;
+                  preferences?.setString("location", value);
+                  await dataController.getWeatherForecast();
+                  await dataController.getWeatherData();
+                },
+                hintText: locationProvider.location ?? "Locating...",
+                hideSelectedFieldWhenExpanded: true,
+                decoration: const CustomDropdownDecoration(
+                  closedFillColor: Colors.white12,
+                  expandedFillColor: Colors.white,
+                  closedSuffixIcon: Icon(
+                    Icons.location_on,
+                    color: Colors.white,
+                  ),
+                  hintStyle: TextStyle(color: Colors.white),
                 ),
-            ),
-          ),
-        ));
+              ),
+            ));
   }
 }

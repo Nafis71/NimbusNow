@@ -1,7 +1,5 @@
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:gap/gap.dart';
 import 'package:nimbus_now/controllers/data_controller.dart';
 import 'package:nimbus_now/widgets/hot_scene.dart';
 import 'package:nimbus_now/widgets/overcast_scene.dart';
@@ -13,13 +11,20 @@ import 'package:provider/provider.dart';
 class WeatherInformation extends StatelessWidget {
   final DataController dataController;
   final Function locatorFunction;
+  final Orientation orientation;
 
-  const WeatherInformation({super.key, required this.dataController, required this.locatorFunction});
+  const WeatherInformation(
+      {super.key,
+      required this.dataController,
+      required this.locatorFunction,
+      required this.orientation});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.55,
+      height: (orientation == Orientation.portrait)
+          ? MediaQuery.of(context).size.height * 0.55
+          : MediaQuery.of(context).size.height * 0.7,
       alignment: Alignment.topCenter,
       child: Stack(
         children: [
@@ -31,16 +36,26 @@ class WeatherInformation extends StatelessWidget {
             child:
                 Consumer<DataController>(builder: (context, provider, child) {
               if (provider.currentCondition!.contains("thunder")) {
-                return const ThunderScene();
+                return ThunderScene(
+                  orientation: orientation,
+                );
               } else if (provider.currentCondition!.contains("overcast")) {
-                return const OvercastScene();
+                return OvercastScene(
+                  orientation: orientation,
+                );
               } else if (provider.currentCondition!.contains("rain")) {
-                return const RainScene();
+                return RainScene(
+                  orientation: orientation,
+                );
               } else if (provider.currentCondition!.contains("hot") ||
                   provider.currentCondition!.contains("haze")) {
-                return const HotScene();
+                return HotScene(
+                  orientation: orientation,
+                );
               }
-              return const SunnyScene();
+              return SunnyScene(
+                orientation: orientation,
+              );
             }),
           ),
           Positioned(
@@ -99,7 +114,7 @@ class WeatherInformation extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.4,
+            top: MediaQuery.of(context).size.height * 0.39,
             left: 20,
             child: Consumer<DataController>(
               builder: (context, provider, child) {
@@ -114,18 +129,22 @@ class WeatherInformation extends StatelessWidget {
             ),
           ),
           Positioned(
-              top: MediaQuery.of(context).size.height * 0.43,
+              top: (orientation == Orientation.portrait)
+                  ? MediaQuery.of(context).size.height * 0.43
+                  : MediaQuery.of(context).size.height * 0.48,
               right: 20,
               child: InkWell(
-                splashColor: Colors.transparent,
-                onTap: () => locatorFunction(),
+                  splashColor: Colors.transparent,
+                  onTap: () => locatorFunction(),
                   child: const Icon(
-                Icons.my_location,
-                color: Colors.white,
-                size: 35,
-              ))),
+                    Icons.my_location,
+                    color: Colors.white,
+                    size: 35,
+                  ))),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.1,
+            top: (orientation == Orientation.portrait)
+                ? MediaQuery.of(context).size.height * 0.1
+                : MediaQuery.of(context).size.height * 0.15,
             right: 10,
             child: Consumer<DataController>(
               builder: (context, provider, child) => Column(

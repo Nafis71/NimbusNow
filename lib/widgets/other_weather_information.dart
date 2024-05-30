@@ -5,7 +5,13 @@ import 'package:nimbus_now/controllers/data_controller.dart';
 class OtherWeatherInformation extends StatelessWidget {
   final DataController provider;
   final int index;
-  const OtherWeatherInformation({super.key, required this.provider, required this.index});
+  final Orientation orientation;
+
+  const OtherWeatherInformation(
+      {super.key,
+      required this.provider,
+      required this.index,
+      required this.orientation});
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +24,16 @@ class OtherWeatherInformation extends StatelessWidget {
           CircleAvatar(
             radius: 25,
             backgroundColor: Colors.transparent,
-            child: Icon(provider.extraWeatherData[index]['icon'],size: 30,color: Colors.white,),
+            child: Icon(
+              provider.extraWeatherData[index]['icon'],
+              size: 30,
+              color: Colors.white,
+            ),
           ),
           const Gap(10),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment:
-            CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 provider.extraWeatherData[index]['parameterName'],

@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 class WeatherForecastHourLayout extends StatelessWidget {
   const WeatherForecastHourLayout({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return Container(

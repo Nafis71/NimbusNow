@@ -5,7 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:nimbus_now/controllers/gps_location.dart';
 
-class LocationController extends ChangeNotifier{
+class LocationController extends ChangeNotifier {
   String? _location;
 
   String? get location => _location;
@@ -14,21 +14,19 @@ class LocationController extends ChangeNotifier{
     _location = location;
     notifyListeners();
   }
-  
-  Future<void> getCurrentLocation() async{
-    try{
+
+  Future<void> getCurrentLocation() async {
+    try {
       Position position = await GpsLocation.determinePosition();
-      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
       _location = placemarks.last.locality.toString();
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       _location = "New York";
-      if(kDebugMode){
+      if (kDebugMode) {
         debugPrint(e.toString());
       }
     }
-
   }
-  
-
 }

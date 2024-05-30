@@ -6,7 +6,9 @@ import '../../controllers/data_controller.dart';
 import '../../widgets/other_weather_information.dart';
 
 class MoreWeatherInformationLayout extends StatelessWidget {
-  const MoreWeatherInformationLayout({super.key});
+  final Orientation orientation;
+
+  const MoreWeatherInformationLayout({super.key, required this.orientation});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +21,7 @@ class MoreWeatherInformationLayout extends StatelessWidget {
           const Text(
             "Weather Now",
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.w600),
+                color: Colors.white, fontSize: 24, fontWeight: FontWeight.w600),
           ),
           const Gap(5),
           Container(
@@ -39,24 +39,24 @@ class MoreWeatherInformationLayout extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: Consumer<DataController>(
-              builder: (context, provider, child) =>
-                  GridView.builder(
-                    primary: false,
-                    shrinkWrap: true,
-                    gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 2.5,
-                        crossAxisSpacing: 20,
-                        mainAxisSpacing: 10),
-                    itemCount: provider.extraWeatherData.length,
-                    itemBuilder: (context, index) {
-                      return OtherWeatherInformation(
-                        provider: provider,
-                        index: index,
-                      );
-                    },
-                  ),
+              builder: (context, provider, child) => GridView.builder(
+                primary: false,
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount:
+                        (orientation == Orientation.portrait) ? 2 : 3,
+                    childAspectRatio: 2.5,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 10),
+                itemCount: provider.extraWeatherData.length,
+                itemBuilder: (context, index) {
+                  return OtherWeatherInformation(
+                    orientation: orientation,
+                    provider: provider,
+                    index: index,
+                  );
+                },
+              ),
             ),
           ),
         ],
