@@ -95,7 +95,26 @@ class AstronomyLayout extends StatelessWidget {
                       decoration:
                           const BoxDecoration(color: Colors.transparent)),
                   disabled: true,
-                )
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      provider.sunriseTime,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      provider.sunsetTime,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ],
             ),
           );

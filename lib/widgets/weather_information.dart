@@ -12,8 +12,9 @@ import 'package:provider/provider.dart';
 
 class WeatherInformation extends StatelessWidget {
   final DataController dataController;
+  final Function locatorFunction;
 
-  const WeatherInformation({super.key, required this.dataController});
+  const WeatherInformation({super.key, required this.dataController, required this.locatorFunction});
 
   @override
   Widget build(BuildContext context) {
@@ -98,19 +99,31 @@ class WeatherInformation extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.5,
-            right: 10,
+            top: MediaQuery.of(context).size.height * 0.4,
+            left: 20,
             child: Consumer<DataController>(
               builder: (context, provider, child) {
                 if (provider.isRefreshing) {
-                  return const Text("Refreshing...",style: TextStyle(
-                    color: Colors.white
-                  ),);
+                  return const Text(
+                    "Refreshing...",
+                    style: TextStyle(color: Colors.white),
+                  );
                 }
                 return const SizedBox.shrink();
               },
             ),
           ),
+          Positioned(
+              top: MediaQuery.of(context).size.height * 0.43,
+              right: 20,
+              child: InkWell(
+                splashColor: Colors.transparent,
+                onTap: () => locatorFunction(),
+                  child: const Icon(
+                Icons.my_location,
+                color: Colors.white,
+                size: 35,
+              ))),
           Positioned(
             top: MediaQuery.of(context).size.height * 0.1,
             right: 10,

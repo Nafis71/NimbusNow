@@ -10,8 +10,9 @@ class LocationController extends ChangeNotifier{
 
   String? get location => _location;
 
-  set setLocation(String location) {
+  set setLocation(String? location) {
     _location = location;
+    notifyListeners();
   }
   
   Future<void> getCurrentLocation() async{
@@ -19,6 +20,7 @@ class LocationController extends ChangeNotifier{
       Position position = await GpsLocation.determinePosition();
       List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
       _location = placemarks.last.locality.toString();
+      notifyListeners();
     } catch(e){
       _location = "New York";
       if(kDebugMode){

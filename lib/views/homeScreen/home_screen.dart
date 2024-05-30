@@ -95,10 +95,18 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 WeatherInformation(
                   dataController: dataController,
+                  locatorFunction: () async {
+                    locationController.setLocation = null;
+                    Future.delayed(Duration(seconds: 1),() async{
+                      await locationController.getCurrentLocation();
+                    });
+                    preferences!.setString("location", locationController.location.toString());
+                    await loadData();
+                  },
                 ),
                 LocationSelector(
                   preferences: preferences,
-                  locationController: locationController,
+                  dataController: dataController,
                 ),
                 const WeatherForecastHourLayout(),
                 const Gap(5),

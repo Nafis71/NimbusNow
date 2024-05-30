@@ -9,23 +9,30 @@ import '../models/DropdownMenu/dropdown_menu.dart';
 
 class LocationSelector extends StatelessWidget {
   final SharedPreferences? preferences;
-  final LocationController locationController;
-  const LocationSelector({super.key, required this.preferences, required this.locationController});
+  final DataController dataController;
+  const LocationSelector({super.key, required this.preferences, required this.dataController});
 
   @override
   Widget build(BuildContext context) {
-    return  Consumer<DataController>(builder: (context, provider, child) =>
+    return  Consumer<LocationController>(builder: (context, locationProvider, child) =>
         Padding(
           padding: const EdgeInsets.all(8),
           child: CustomDropdown<String>.search(
+            headerBuilder:(context,_){
+              return Text(locationProvider.location ?? "Locating...",style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700
+              ),);
+            } ,
             items: dropdownMenuList,
             onChanged: (value) async {
-              locationController.setLocation = value;
+              locationProvider.setLocation = value;
               preferences?.setString("location", value);
-              await provider.getWeatherForecast();
-              await provider.getWeatherData();
+              await dataController.getWeatherForecast();
+              await dataController.getWeatherData();
             },
-            hintText: locationController.location ?? "Locating...",
+            hintText: locationProvider.location ?? "Locating...",
             hideSelectedFieldWhenExpanded: true,
             decoration: const CustomDropdownDecoration(
                 closedFillColor: Colors.white12,
@@ -34,11 +41,6 @@ class LocationSelector extends StatelessWidget {
                 hintStyle: TextStyle(
                     color: Colors.white
                 ),
-                headerStyle: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700
-                )
             ),
           ),
         ));
