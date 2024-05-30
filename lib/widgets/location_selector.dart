@@ -25,8 +25,7 @@ class LocationSelector extends StatelessWidget {
               provider.getWeatherForecast();
               provider.getWeatherData();
             },
-            hintText: "Select a location",
-            initialItem: locationController.location,
+            hintText: locationController.location ?? "Locating...",
             hideSelectedFieldWhenExpanded: true,
             decoration: const CustomDropdownDecoration(
                 closedFillColor: Colors.white12,

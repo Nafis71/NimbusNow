@@ -52,11 +52,13 @@ class _HomeScreenState extends State<HomeScreen> {
   initializeSharedPreference() async {
     preferences = await SharedPreferences.getInstance();
     if (preferences!.get("location") == null) {
-      locationController.setLocation = "Dhaka";
+      await locationController.getCurrentLocation();
+      preferences!.setString("location", locationController.location.toString());
+      loadData();
     } else {
       locationController.setLocation = preferences!.get("location").toString();
+      loadData();
     }
-    loadData();
   }
 
   void loadData() async {
@@ -66,7 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("Widget Tree");
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {

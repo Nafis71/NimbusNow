@@ -7,7 +7,6 @@ import 'package:nimbus_now/controllers/location_controller.dart';
 import 'package:nimbus_now/models/forecastModels/Hour.dart';
 import 'package:nimbus_now/models/forecastModels/forecastModel.dart';
 import 'package:nimbus_now/services/api_service.dart';
-import 'package:provider/provider.dart';
 import '../models/weatherModels/weather_model.dart';
 
 class DataController extends ChangeNotifier {
@@ -52,8 +51,11 @@ class DataController extends ChangeNotifier {
 
   Future<void> getWeatherData() async {
     try {
+      if(locationProvider.location == null){
+        return;
+      }
       Map<String, dynamic> jsonData =
-          await _apiService.fetchWeatherData(locationProvider.location);
+          await _apiService.fetchWeatherData(locationProvider.location!);
       forecastModel.clear();
       weatherModel = WeatherModel.fromJson(jsonData);
       currentCondition =
@@ -79,8 +81,11 @@ class DataController extends ChangeNotifier {
   }
 
   Future<void> getWeatherForecast() async {
+    if(locationProvider.location == null){
+      return;
+    }
     try {
-      List<dynamic> jsonList = await _apiService.fetchForecastData(locationProvider.location);
+      List<dynamic> jsonList = await _apiService.fetchForecastData(locationProvider.location!);
       hourlyForecastList.clear();
       for (Map<String, dynamic> json in jsonList) {
         forecastModel.add(ForecastModel.fromJson(json));
