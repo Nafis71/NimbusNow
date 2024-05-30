@@ -41,15 +41,13 @@ class AstronomyController extends ChangeNotifier {
 
   int getSunsetHour() {
     int sunsetHour = int.tryParse(DateFormat('hh')
-            .format(DateTime.parse(formatTimeString(_sunsetTime)))) ??
-        0;
+            .format(DateTime.parse(formatTimeString(_sunsetTime)))) ?? 0;
     return sunsetHour + 12;
   }
 
   int getSunriseHour() {
     return int.tryParse(DateFormat('hh')
-            .format(DateTime.parse(formatTimeString(_sunriseTime)))) ??
-        0;
+            .format(DateTime.parse(formatTimeString(_sunriseTime)))) ?? 0;
   }
 
   String formatTimeString(String timeString) {
