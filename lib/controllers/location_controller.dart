@@ -21,6 +21,7 @@ class LocationController extends ChangeNotifier {
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
       _location = placemarks.last.locality.toString();
+      print(_location);
       notifyListeners();
     } catch (e) {
       _location = "New York";

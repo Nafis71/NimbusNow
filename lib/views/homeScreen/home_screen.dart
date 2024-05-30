@@ -94,10 +94,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     orientation: orientation,
                     dataController: dataController,
                     locatorFunction: () async {
-                      locationController.setLocation = null;
-                      Future.delayed(const Duration(seconds: 1), () async {
-                        await locationController.getCurrentLocation();
-                      });
+                      locationController.setLocation = "Locating...";
+                      await locationController.getCurrentLocation();
                       preferences!.setString(
                           "location", locationController.location.toString());
                       await loadData();

@@ -158,7 +158,7 @@ class WeatherInformation extends StatelessWidget {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                            text: "${provider.weatherModel.location?.name}, ",
+                            text: "${provider.weatherModel.location?.name ?? "Locating..."} ",
                             style: const TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold)),
                         TextSpan(

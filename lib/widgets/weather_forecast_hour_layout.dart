@@ -29,6 +29,12 @@ class WeatherForecastHourLayout extends StatelessWidget {
       alignment: Alignment.center,
       child: Consumer<DataController>(
         builder: (context, provider, child) {
+          if(provider.isRefreshing){
+             return Text("Refreshing....",style: TextStyle(
+               color: Colors.white,
+               fontSize: 17
+             ),);
+          }
           return ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: provider.hourlyForecastList.length,

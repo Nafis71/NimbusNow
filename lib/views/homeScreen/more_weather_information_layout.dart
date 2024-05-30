@@ -39,24 +39,35 @@ class MoreWeatherInformationLayout extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: Consumer<DataController>(
-              builder: (context, provider, child) => GridView.builder(
-                primary: false,
-                shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount:
-                        (orientation == Orientation.portrait) ? 2 : 3,
-                    childAspectRatio: 2.5,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 10),
-                itemCount: provider.extraWeatherData.length,
-                itemBuilder: (context, index) {
-                  return OtherWeatherInformation(
-                    orientation: orientation,
-                    provider: provider,
-                    index: index,
+              builder: (context, provider, child){
+                if(provider.isRefreshing){
+                  return Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text("Refreshing....",style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17
+                    ),),
                   );
-                },
-              ),
+                }
+                return GridView.builder(
+                  primary: false,
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount:
+                      (orientation == Orientation.portrait) ? 2 : 3,
+                      childAspectRatio: 2.5,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 10),
+                  itemCount: provider.extraWeatherData.length,
+                  itemBuilder: (context, index) {
+                    return OtherWeatherInformation(
+                      orientation: orientation,
+                      provider: provider,
+                      index: index,
+                    );
+                  },
+                );
+              },
             ),
           ),
         ],
