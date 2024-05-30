@@ -23,15 +23,20 @@ class WeatherInformation extends StatelessWidget {
       child: Stack(
         children: [
           Animate(
-            effects: const [FadeEffect(duration: Duration(seconds: 5),curve: Curves.decelerate)],
-            child: Consumer<DataController>(builder: (context,provider,child){
-              if(provider.currentCondition!.contains("thunder")){
+            effects: const [
+              FadeEffect(
+                  duration: Duration(seconds: 5), curve: Curves.decelerate)
+            ],
+            child:
+                Consumer<DataController>(builder: (context, provider, child) {
+              if (provider.currentCondition!.contains("thunder")) {
                 return const ThunderScene();
-              } else if(provider.currentCondition!.contains("overcast")){
+              } else if (provider.currentCondition!.contains("overcast")) {
                 return const OvercastScene();
-              } else if (provider.currentCondition!.contains("rain")){
+              } else if (provider.currentCondition!.contains("rain")) {
                 return const RainScene();
-              } else if(provider.currentCondition!.contains("hot") || provider.currentCondition!.contains("haze")){
+              } else if (provider.currentCondition!.contains("hot") ||
+                  provider.currentCondition!.contains("haze")) {
                 return const HotScene();
               }
               return const SunnyScene();
@@ -66,7 +71,8 @@ class WeatherInformation extends StatelessWidget {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                            text: provider.weatherModel.current?.tempC.toString(),
+                            text:
+                                provider.weatherModel.current?.tempC.toString(),
                             style: const TextStyle(
                                 fontSize: 55, fontWeight: FontWeight.bold)),
                         TextSpan(
@@ -83,11 +89,26 @@ class WeatherInformation extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    provider.weatherModel.current?.condition?.text.toString() ?? "",
+                    provider.weatherModel.current?.condition?.text.toString() ??
+                        "",
                     style: const TextStyle(color: Colors.white, fontSize: 17),
                   ),
                 ],
               ),
+            ),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.5,
+            right: 10,
+            child: Consumer<DataController>(
+              builder: (context, provider, child) {
+                if (provider.isRefreshing) {
+                  return const Text("Refreshing...",style: TextStyle(
+                    color: Colors.white
+                  ),);
+                }
+                return const SizedBox.shrink();
+              },
             ),
           ),
           Positioned(
@@ -96,7 +117,11 @@ class WeatherInformation extends StatelessWidget {
             child: Consumer<DataController>(
               builder: (context, provider, child) => Column(
                 children: [
-                  const Icon(Icons.location_on,color:Color(0xFFFFA726),size: 30,),
+                  const Icon(
+                    Icons.location_on,
+                    color: Color(0xFFFFA726),
+                    size: 30,
+                  ),
                   RichText(
                     text: TextSpan(
                       children: [
@@ -105,7 +130,10 @@ class WeatherInformation extends StatelessWidget {
                             style: const TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold)),
                         TextSpan(
-                          text: (provider.weatherModel.location?.country == "United States of America")? "USA":provider.weatherModel.location?.country,
+                          text: (provider.weatherModel.location?.country ==
+                                  "United States of America")
+                              ? "USA"
+                              : provider.weatherModel.location?.country,
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,

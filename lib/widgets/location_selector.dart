@@ -22,8 +22,8 @@ class LocationSelector extends StatelessWidget {
             onChanged: (value) async {
               locationController.setLocation = value;
               preferences?.setString("location", value);
-              provider.getWeatherForecast();
-              provider.getWeatherData();
+              await provider.getWeatherForecast();
+              await provider.getWeatherData();
             },
             hintText: locationController.location ?? "Locating...",
             hideSelectedFieldWhenExpanded: true,

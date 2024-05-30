@@ -11,6 +11,7 @@ import '../models/weatherModels/weather_model.dart';
 
 class DataController extends ChangeNotifier {
   final ApiService _apiService = ApiService();
+  bool _isRefreshing = false;
   WeatherModel weatherModel = WeatherModel();
   late LocationController locationProvider;
   String? currentCondition = "sunny";
@@ -50,10 +51,11 @@ class DataController extends ChangeNotifier {
   ];
 
   Future<void> getWeatherData() async {
+    if(locationProvider.location == null){
+      return;
+    }
     try {
-      if(locationProvider.location == null){
-        return;
-      }
+      _isRefreshing = true;
       Map<String, dynamic> jsonData =
           await _apiService.fetchWeatherData(locationProvider.location!);
       forecastModel.clear();
@@ -72,6 +74,8 @@ class DataController extends ChangeNotifier {
           "${weatherModel.current?.uv?.toInt().toString()}/10";
       extraWeatherData[5]["value"] =
           "${weatherModel.current?.cloud.toString()}%";
+      await getWeatherForecast();
+      _isRefreshing = false;
       notifyListeners();
     } catch (e) {
       if (kDebugMode) {
@@ -105,6 +109,9 @@ class DataController extends ChangeNotifier {
       }
       for (int index = 0; index < length; index++) {
         for (int j = newIndex; j < forecastModel[index].hour!.length; j++) {
+          if(j == newIndex){
+            forecastModel[index].hour![j].tempC = weatherModel.current!.tempC;
+          }
           hourlyForecastList.add(forecastModel[index].hour![j]);
         }
       }
@@ -123,5 +130,8 @@ class DataController extends ChangeNotifier {
   set setLocationController(LocationController provider){
     locationProvider = provider;
   }
+
+  bool get isRefreshing => _isRefreshing;
+
 
 }
