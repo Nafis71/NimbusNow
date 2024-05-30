@@ -1,12 +1,16 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:nimbus_now/controllers/data_controller.dart';
+import 'package:nimbus_now/controllers/location_controller.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/DropdownMenu/dropdown_menu.dart';
 
 class LocationSelector extends StatelessWidget {
-  const LocationSelector({super.key});
+  final SharedPreferences? preferences;
+  final LocationController locationController;
+  const LocationSelector({super.key, required this.preferences, required this.locationController});
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +20,13 @@ class LocationSelector extends StatelessWidget {
           child: CustomDropdown<String>.search(
             items: dropdownMenuList,
             onChanged: (value) async {
-              provider.setLocation = value;
+              locationController.setLocation = value;
+              preferences?.setString("location", value);
               provider.getWeatherForecast();
               provider.getWeatherData();
             },
             hintText: "Select a location",
-            initialItem: provider.location,
+            initialItem: locationController.location,
             hideSelectedFieldWhenExpanded: true,
             decoration: const CustomDropdownDecoration(
                 closedFillColor: Colors.white12,

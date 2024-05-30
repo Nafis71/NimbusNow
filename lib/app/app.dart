@@ -1,6 +1,7 @@
 import 'package:device_preview_minus/device_preview_minus.dart';
 import 'package:flutter/material.dart';
 import 'package:nimbus_now/controllers/data_controller.dart';
+import 'package:nimbus_now/controllers/location_controller.dart';
 import 'package:nimbus_now/views/homeScreen/home_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +13,7 @@ class NimbusNow extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context)=> DataController()),
+        ChangeNotifierProvider(create: (context)=> LocationController()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

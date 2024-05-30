@@ -8,12 +8,14 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:nimbus_now/controllers/data_controller.dart';
+import 'package:nimbus_now/controllers/location_controller.dart';
 import 'package:nimbus_now/models/DropdownMenu/dropdown_menu.dart';
 import 'package:nimbus_now/widgets/location_selector.dart';
 import 'package:nimbus_now/widgets/other_weather_information.dart';
 import 'package:nimbus_now/widgets/weather_forecast_hour_layout.dart';
 import 'package:nimbus_now/widgets/weather_information.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,18 +26,37 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final DataController dataController;
+  late final LocationController locationController;
+  SharedPreferences? preferences;
 
   @override
   void initState() {
-    dataController = Provider.of<DataController>(context, listen: false);
-    loadData();
     super.initState();
+    dataController = Provider.of<DataController>(context, listen: false);
+    locationController = Provider.of<LocationController>(context, listen: false);
+    dataController.setLocationController = locationController;
+    initializeSharedPreference();
+
   }
 
   @override
   void dispose() {
     dataController.dispose();
+    locationController.dispose();
+    print("Calling Dispose");
     super.dispose();
+  }
+
+
+
+  initializeSharedPreference() async {
+    preferences = await SharedPreferences.getInstance();
+    if (preferences!.get("location") == null) {
+      locationController.setLocation = "Dhaka";
+    } else {
+      locationController.setLocation = preferences!.get("location").toString();
+    }
+    loadData();
   }
 
   void loadData() async {
@@ -45,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("Widget Tree");
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
@@ -75,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 WeatherInformation(
                   dataController: dataController,
                 ),
-                const LocationSelector(),
+                LocationSelector(preferences: preferences,locationController: locationController,),
                 const WeatherForecastHourLayout(),
                 const Gap(5),
                 Container(

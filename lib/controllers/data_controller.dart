@@ -3,16 +3,18 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:nimbus_now/controllers/location_controller.dart';
 import 'package:nimbus_now/models/forecastModels/Hour.dart';
 import 'package:nimbus_now/models/forecastModels/forecastModel.dart';
 import 'package:nimbus_now/services/api_service.dart';
+import 'package:provider/provider.dart';
 import '../models/weatherModels/weather_model.dart';
 
 class DataController extends ChangeNotifier {
   final ApiService _apiService = ApiService();
   WeatherModel weatherModel = WeatherModel();
+  late LocationController locationProvider;
   String? currentCondition = "sunny";
-  String _location = "Dhaka";
   List<ForecastModel> forecastModel = [];
   List<Hour> hourlyForecastList = [];
   List<Map<String, dynamic>> extraWeatherData = [
@@ -51,7 +53,7 @@ class DataController extends ChangeNotifier {
   Future<void> getWeatherData() async {
     try {
       Map<String, dynamic> jsonData =
-          await _apiService.fetchWeatherData(_location);
+          await _apiService.fetchWeatherData(locationProvider.location);
       forecastModel.clear();
       weatherModel = WeatherModel.fromJson(jsonData);
       currentCondition =
@@ -78,7 +80,7 @@ class DataController extends ChangeNotifier {
 
   Future<void> getWeatherForecast() async {
     try {
-      List<dynamic> jsonList = await _apiService.fetchForecastData(_location);
+      List<dynamic> jsonList = await _apiService.fetchForecastData(locationProvider.location);
       hourlyForecastList.clear();
       for (Map<String, dynamic> json in jsonList) {
         forecastModel.add(ForecastModel.fromJson(json));
@@ -113,11 +115,8 @@ class DataController extends ChangeNotifier {
     return DateFormat.MMMMEEEEd().format(DateTime.now());
   }
 
-  String get location => _location;
-
-  set setLocation(String location) {
-    _location = location;
-    notifyListeners();
+  set setLocationController(LocationController provider){
+    locationProvider = provider;
   }
 
 }
