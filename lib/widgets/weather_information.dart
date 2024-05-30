@@ -83,7 +83,7 @@ class WeatherInformation extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    provider.weatherModel.current?.condition?.text.toString() ?? "Refreshing...",
+                    provider.weatherModel.current?.condition?.text.toString() ?? "",
                     style: const TextStyle(color: Colors.white, fontSize: 17),
                   ),
                 ],
@@ -96,7 +96,7 @@ class WeatherInformation extends StatelessWidget {
             child: Consumer<DataController>(
               builder: (context, provider, child) => Column(
                 children: [
-                  const Icon(Icons.location_on,color: Colors.white,size: 30,),
+                  const Icon(Icons.location_on,color:Color(0xFFFFA726),size: 30,),
                   RichText(
                     text: TextSpan(
                       children: [
@@ -105,7 +105,7 @@ class WeatherInformation extends StatelessWidget {
                             style: const TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold)),
                         TextSpan(
-                          text: provider.weatherModel.location?.country,
+                          text: (provider.weatherModel.location?.country == "United States of America")? "USA":provider.weatherModel.location?.country,
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -120,7 +120,7 @@ class WeatherInformation extends StatelessWidget {
                         TextSpan(
                             text: "${provider.getDateTime()} ",
                             style: const TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.normal)),
+                                fontSize: 13, fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ),

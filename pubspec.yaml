@@ -44,6 +44,7 @@ dependencies:
   weather_animation: ^1.0.1
   flutter_animate: ^4.5.0
   ionicons: ^0.2.2
+  animated_custom_dropdown: ^3.0.0
 
 dev_dependencies:
   flutter_test:

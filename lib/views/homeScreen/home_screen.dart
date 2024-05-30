@@ -1,10 +1,15 @@
 import 'dart:ui';
 
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:nimbus_now/controllers/data_controller.dart';
+import 'package:nimbus_now/models/DropdownMenu/dropdown_menu.dart';
+import 'package:nimbus_now/widgets/location_selector.dart';
 import 'package:nimbus_now/widgets/other_weather_information.dart';
 import 'package:nimbus_now/widgets/weather_forecast_hour_layout.dart';
 import 'package:nimbus_now/widgets/weather_information.dart';
@@ -42,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: RefreshIndicator(
-        onRefresh: () async{
+        onRefresh: () async {
           await dataController.getWeatherData();
           await dataController.getWeatherForecast();
         },
@@ -70,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 WeatherInformation(
                   dataController: dataController,
                 ),
+                const LocationSelector(),
                 const WeatherForecastHourLayout(),
                 const Gap(5),
                 Container(
@@ -101,7 +107,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         alignment: Alignment.center,
                         child: Consumer<DataController>(
-                          builder: (context, provider, child) => GridView.builder(
+                          builder: (context, provider, child) =>
+                              GridView.builder(
                             primary: false,
                             shrinkWrap: true,
                             gridDelegate:
