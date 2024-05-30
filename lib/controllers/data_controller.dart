@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:nimbus_now/controllers/astronomy_controller.dart';
 import 'package:nimbus_now/controllers/location_controller.dart';
 import 'package:nimbus_now/models/forecastModels/Hour.dart';
 import 'package:nimbus_now/models/forecastModels/forecastModel.dart';
@@ -13,7 +14,8 @@ class DataController extends ChangeNotifier {
   final ApiService _apiService = ApiService();
   bool _isRefreshing = false;
   WeatherModel weatherModel = WeatherModel();
-  late LocationController locationProvider;
+  late LocationController _locationProvider;
+  late AstronomyController _astronomyProvider;
   String? currentCondition = "sunny";
   List<ForecastModel> forecastModel = [];
   List<Hour> hourlyForecastList = [];
@@ -51,13 +53,13 @@ class DataController extends ChangeNotifier {
   ];
 
   Future<void> getWeatherData() async {
-    if(locationProvider.location == null){
+    if (_locationProvider.location == null) {
       return;
     }
     try {
       _isRefreshing = true;
       Map<String, dynamic> jsonData =
-          await _apiService.fetchWeatherData(locationProvider.location!);
+          await _apiService.fetchWeatherData(_locationProvider.location!);
       forecastModel.clear();
       weatherModel = WeatherModel.fromJson(jsonData);
       currentCondition =
@@ -85,11 +87,12 @@ class DataController extends ChangeNotifier {
   }
 
   Future<void> getWeatherForecast() async {
-    if(locationProvider.location == null){
+    if (_locationProvider.location == null) {
       return;
     }
     try {
-      List<dynamic> jsonList = await _apiService.fetchForecastData(locationProvider.location!);
+      List<dynamic> jsonList =
+          await _apiService.fetchForecastData(_locationProvider.location!);
       hourlyForecastList.clear();
       for (Map<String, dynamic> json in jsonList) {
         forecastModel.add(ForecastModel.fromJson(json));
@@ -109,12 +112,13 @@ class DataController extends ChangeNotifier {
       }
       for (int index = 0; index < length; index++) {
         for (int j = newIndex; j < forecastModel[index].hour!.length; j++) {
-          if(j == newIndex){
+          if (j == newIndex) {
             forecastModel[index].hour![j].tempC = weatherModel.current!.tempC;
           }
           hourlyForecastList.add(forecastModel[index].hour![j]);
         }
       }
+      setAstronomyData();
       notifyListeners();
     } catch (e) {
       if (kDebugMode) {
@@ -123,15 +127,25 @@ class DataController extends ChangeNotifier {
     }
   }
 
+  void setAstronomyData() {
+    _astronomyProvider.setSunriseTime =
+        forecastModel[0].astro!.sunrise.toString();
+    _astronomyProvider.setSunsetTime =
+        forecastModel[0].astro!.sunset.toString();
+    _astronomyProvider.setHasData = true;
+  }
+
   String getDateTime() {
     return DateFormat.MMMMEEEEd().format(DateTime.now());
   }
 
-  set setLocationController(LocationController provider){
-    locationProvider = provider;
+  set setLocationController(LocationController provider) {
+    _locationProvider = provider;
+  }
+
+  set setAstronomyController(AstronomyController provider) {
+    _astronomyProvider = provider;
   }
 
   bool get isRefreshing => _isRefreshing;
-
-
 }

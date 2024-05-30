@@ -1,7 +1,13 @@
+import 'package:another_xlider/another_xlider.dart';
+import 'package:another_xlider/models/handler.dart';
+import 'package:another_xlider/models/tooltip/tooltip.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:ionicons/ionicons.dart';
+import 'package:nimbus_now/controllers/astronomy_controller.dart';
 import 'package:nimbus_now/controllers/data_controller.dart';
 import 'package:nimbus_now/controllers/location_controller.dart';
+import 'package:nimbus_now/views/homeScreen/astronomy_layout.dart';
 import 'package:nimbus_now/views/homeScreen/more_weather_information_layout.dart';
 import 'package:nimbus_now/widgets/location_selector.dart';
 import 'package:nimbus_now/widgets/weather_forecast_hour_layout.dart';
@@ -19,16 +25,20 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late final DataController dataController;
   late final LocationController locationController;
+  late final AstronomyController astronomyController;
   SharedPreferences? preferences;
 
   @override
   void initState() {
     super.initState();
     dataController = Provider.of<DataController>(context, listen: false);
-    locationController = Provider.of<LocationController>(context, listen: false);
+    locationController =
+        Provider.of<LocationController>(context, listen: false);
+    astronomyController =
+        Provider.of<AstronomyController>(context, listen: false);
     dataController.setLocationController = locationController;
+    dataController.setAstronomyController = astronomyController;
     initializeSharedPreference();
-
   }
 
   @override
@@ -38,21 +48,20 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-
-
   initializeSharedPreference() async {
     preferences = await SharedPreferences.getInstance();
     if (preferences!.get("location") == null) {
       await locationController.getCurrentLocation();
-      preferences!.setString("location", locationController.location.toString());
-      loadData();
+      preferences!
+          .setString("location", locationController.location.toString());
+      await loadData();
     } else {
       locationController.setLocation = preferences!.get("location").toString();
-      loadData();
+      await loadData();
     }
   }
 
-  void loadData() async {
+  Future<void> loadData() async {
     await dataController.getWeatherData();
   }
 
@@ -61,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          loadData();
+          await loadData();
         },
         backgroundColor: const Color(0xff263238),
         color: const Color(0xFFFFA726),
@@ -87,10 +96,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 WeatherInformation(
                   dataController: dataController,
                 ),
-                LocationSelector(preferences: preferences,locationController: locationController,),
+                LocationSelector(
+                  preferences: preferences,
+                  locationController: locationController,
+                ),
                 const WeatherForecastHourLayout(),
                 const Gap(5),
                 const MoreWeatherInformationLayout(),
+                const Gap(10),
+                const AstronomyLayout(),
                 const Gap(10),
               ],
             ),

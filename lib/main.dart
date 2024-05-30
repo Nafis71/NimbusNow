@@ -3,5 +3,5 @@ import 'package:flutter/material.dart';
 import 'package:nimbus_now/app/app.dart';
 
 void main() {
-  runApp(DevicePreview(builder: (context)=> const NimbusNow()));
+  runApp(DevicePreview(enabled:false,builder: (context)=> const NimbusNow()));
 }
