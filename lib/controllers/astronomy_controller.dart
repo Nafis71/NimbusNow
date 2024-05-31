@@ -51,7 +51,6 @@ class AstronomyController extends ChangeNotifier {
   }
 
   String formatTimeString(String timeString) {
-    // Convert the 12-hour time format to 24-hour time format
     final RegExp timePattern = RegExp(r'(\d{2}):(\d{2}) (AM|PM)');
     final match = timePattern.firstMatch(timeString);
 
