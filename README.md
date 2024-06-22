@@ -23,6 +23,7 @@
 <br />
 
 ## Project's REST API Link
+Place your own api token before using this app.
 `https://www.weatherapi.com/`
 <br />
 
