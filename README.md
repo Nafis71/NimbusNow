@@ -20,6 +20,7 @@
 - Flutter
 - Dart
 - Rest API
+- Provider (State Management)
 <br />
 
 ## Project's REST API Link
